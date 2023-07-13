@@ -6,19 +6,22 @@ let timerId = null;
 btnStart.addEventListener('click',  onClStart )
 btnStop.addEventListener('click', onClStop)
 
+function stateBtn(boole) { 
+  btnStart.disabled = boole
+  btnStop.disabled = !boole
+}
 
 function onClStart() { 
-  btnStart.disabled = true
+  stateBtn(true)
   timerId = setInterval(() => { 
     bodyEl.style.backgroundColor = getRandomHexColor()
   }, 1000)
-
-  btnStop.disabled = false
+ 
 }
 function onClStop() { 
-    btnStop.disabled = true
+    stateBtn(false)
     clearInterval(timerId);
-    btnStart.disabled = false
+    
 }
 
 function getRandomHexColor() {

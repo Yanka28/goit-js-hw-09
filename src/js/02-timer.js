@@ -10,42 +10,62 @@ const minutesEl = document.querySelector('[data-minutes]')
 const secondsEl = document.querySelector('[data-seconds]')
 
 btnStart.disabled = true
+const currentdate = new Date()
 
 const options = {
   enableTime: true,
   time_24hr: true,
-  defaultDate: new Date(),
+  defaultDate: currentdate,
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0] <= options.defaultDate) {
+    if (selectedDates[0] <= currentdate) {
       Notiflix.Notify.info("Please choose a date in the future")
+      btnStart.disabled = true
     } else {
       btnStart.disabled = false
-      let ms = selectedDates[0].getTime() - options.defaultDate.getTime()
-      btnStart.onclick = function(evt){setInterval(() => {
-        convertMs(ms)
-        ms -= 1000
-      },
-        1000)}
-      }
     }
   }
+}
 
-const fp = flatpickr(inputEl, options)
- 
+flatpickr(inputEl, options)
+
+btnStart.addEventListener('click', onClick)
+let time = 0
+
+function onClick() { 
+  time = new Date(inputEl.value).getTime()-currentdate.getTime()
+  const id = setInterval(() => {
+    timerDom()
+    if (time>=1000) { time -= 1000 }
+    else { clearInterval(id)}
+   
+  }, 1000)
+}
+
 function convertMs(ms) {
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
+
   const days = Math.floor(ms / day);
   const hours = Math.floor((ms % day) / hour);
   const minutes = Math.floor(((ms % day) % hour) / minute);
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  daysEl.innerHTML = days.toString().padStart(2,'0')
-  hoursEl.innerHTML = hours.toString().padStart(2,'0')
-  minutesEl.innerHTML = minutes.toString().padStart(2,'0')
-  secondsEl.innerHTML = seconds.toString().padStart(2,'0')
+
   return { days, hours, minutes, seconds };
+}
+
+function timerDom() {   
+  let timeobj = convertMs(time)
+
+  daysEl.innerHTML = addLeadingZero(timeobj.days)
+  hoursEl.innerHTML = addLeadingZero(timeobj.hours)
+  minutesEl.innerHTML = addLeadingZero(timeobj.minutes)
+  secondsEl.innerHTML = addLeadingZero(timeobj.seconds)
+}
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2,'0')
 }
 
