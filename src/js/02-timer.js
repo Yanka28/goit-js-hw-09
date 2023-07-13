@@ -28,8 +28,9 @@ const options = {
 }
 
 flatpickr(inputEl, options)
-
 btnStart.addEventListener('click', onClick)
+
+//  let time = new Date(inputEl.value).getTime()-currentdate.getTime()
 let time = 0
 
 function onClick() { 
