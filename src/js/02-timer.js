@@ -30,11 +30,10 @@ const options = {
 flatpickr(inputEl, options)
 btnStart.addEventListener('click', onClick)
 
-//  let time = new Date(inputEl.value).getTime()-currentdate.getTime()
 let time = 0
 
 function onClick() { 
-  time = new Date(inputEl.value).getTime()-currentdate.getTime()
+  time = new Date(inputEl.value).getTime()-Date.now()
   const id = setInterval(() => {
     timerDom()
     if (time>=1000) { time -= 1000 }
